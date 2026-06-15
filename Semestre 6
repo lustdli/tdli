@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultation des notes</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f6f6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background: white;
+      width: 85%;
+      max-width: 420px;
+      padding: 35px 25px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
+      color: #111827;
+    }
+
+    .univ {
+      color: #666;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .semestre {
+      display: inline-block;
+      background: #eaf2ff;
+      color: #1f5faa;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: bold;
+      margin: 15px 0 8px;
+      color: #333;
+      font-size: 17px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      font-size: 17px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #9e9e9e;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #999;
+      font-size: 16px;
+    }
+
+    #resultat {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #111827;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>Consultation des notes</h1>
+    <div class="univ">Université Ibn Tofail – Kénitra</div>
+    <div class="semestre">LUS TDLI - Semestre 6</div>
+
+    <label>Votre nom</label>
+    <input type="text" id="nom" placeholder="Ex: ALAOUI">
+
+    <label>Votre prénom</label>
+    <input type="text" id="prenom" placeholder="Ex: YOUSSEF">
+
+    <button onclick="chercherNote()">Consulter mes notes</button>
+
+    <div id="resultat"></div>
+
+    <div class="footer">Faculté d'économie et de gestion</div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwKVfORvcWFW3svKvbNkOm7tz1UNRTjbriSdavYKe_OrI3Ipcr7DjJgxYif-P9hWNUpRA/exec";
+
+    async function chercherNote() {
+      const nom = document.getElementById("nom").value.trim().toLowerCase();
+      const prenom = document.getElementById("prenom").value.trim().toLowerCase();
+      const resultat = document.getElementById("resultat");
+
+      if (!nom || !prenom) {
+        resultat.innerHTML = "Veuillez saisir votre nom et prénom.";
+        return;
+      }
+
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+
+        const etudiant = data.find(e =>
+          e.nom.toLowerCase().trim() === nom &&
+          e.prenom.toLowerCase().trim() === prenom
+        );
+
+        if (etudiant) {
+          resultat.innerHTML = "Votre note est : " + etudiant.note;
+        } else {
+          resultat.innerHTML = "Aucune note trouvée.";
+        }
+
+      } catch (error) {
+        resultat.innerHTML = "Erreur de connexion.";
+      }
+    }
+  </script>
+
+</body>
+</html>
