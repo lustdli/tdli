@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consultation des notes</title>
-
   <style>
     body {
       margin: 0;
@@ -15,87 +14,85 @@
       justify-content: center;
       align-items: center;
     }
-
     .card {
       background: white;
       width: 85%;
-      max-width: 420px;
+      max-width: 520px;
       padding: 35px 25px;
       border-radius: 18px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.08);
       text-align: center;
     }
-
-    h1 {
-      font-size: 26px;
-      margin-bottom: 5px;
-      color: #111827;
-    }
-
-    .univ {
-      color: #666;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
+    h1 { color:#001b3a; margin-bottom:5px; }
+    .univ { color:#555; font-size:18px; }
     .semestre {
-      display: inline-block;
-      background: #eaf2ff;
-      color: #1f5faa;
-      padding: 6px 18px;
-      border-radius: 20px;
-      font-size: 16px;
-      margin-bottom: 30px;
+      display:inline-block;
+      background:#eaf2ff;
+      color:#0b5cad;
+      padding:6px 18px;
+      border-radius:20px;
+      margin:12px 0 30px;
     }
-
     label {
-      display: block;
-      text-align: left;
-      font-weight: bold;
-      margin: 15px 0 8px;
-      color: #333;
-      font-size: 17px;
+      display:block;
+      text-align:left;
+      font-weight:bold;
+      margin:15px 0 8px;
     }
-
     input {
-      width: 100%;
-      padding: 15px;
-      font-size: 17px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      box-sizing: border-box;
+      width:100%;
+      padding:15px;
+      font-size:17px;
+      border:1px solid #ddd;
+      border-radius:10px;
+      box-sizing:border-box;
     }
-
     button {
-      width: 100%;
-      margin-top: 25px;
-      padding: 16px;
-      border: none;
-      border-radius: 10px;
-      background: #9e9e9e;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
+      width:100%;
+      margin-top:25px;
+      padding:16px;
+      border:none;
+      border-radius:10px;
+      background:#9e9e9e;
+      color:white;
+      font-size:18px;
+      font-weight:bold;
+      cursor:pointer;
     }
-
-    .footer {
-      margin-top: 30px;
-      color: #999;
-      font-size: 16px;
+    table {
+      width:100%;
+      margin-top:20px;
+      border-collapse:collapse;
+      font-size:15px;
     }
-
+    td {
+      border-bottom:1px solid #eee;
+      padding:9px;
+      text-align:left;
+    }
+    td:last-child {
+      text-align:right;
+      font-weight:bold;
+    }
+    .moyenne {
+      background:#eaf2ff;
+      color:#001b3a;
+      font-weight:bold;
+    }
     #resultat {
-      margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #111827;
+      margin-top:18px;
+      font-size:17px;
+      font-weight:bold;
+    }
+    .footer {
+      margin-top:25px;
+      color:#999;
+      font-size:16px;
     }
   </style>
 </head>
 
 <body>
-
   <div class="card">
     <h1>Consultation des notes</h1>
     <div class="univ">Université Ibn Tofail – Kénitra</div>
@@ -105,7 +102,7 @@
     <input type="text" id="nom" placeholder="Ex: ALAOUI">
 
     <label>Votre prénom</label>
-    <input type="text" id="prenom" placeholder="Ex: YOUSSEF">
+    <input type="text" id="prenom" placeholder="Ex: AHMED">
 
     <button onclick="chercherNote()">Consulter mes notes</button>
 
@@ -114,39 +111,47 @@
     <div class="footer">Faculté d'économie et de gestion</div>
   </div>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyLUCvXb3buos1QR6BM6UMO7o-CfV-PkT8FlB3a94F1eg6oTF4WJzSx12Ml_nUVFrrIOg/exec";
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyLUCvXb3buos1QR6BM6UMO7o-CfV-PkT8FlB3a94F1eg6oTF4WJzSx12Ml_nUVFrrIOg/exec";
 
-    async function chercherNote() {
-      const nom = document.getElementById("nom").value.trim().toLowerCase();
-      const prenom = document.getElementById("prenom").value.trim().toLowerCase();
-      const resultat = document.getElementById("resultat");
+async function chercherNote() {
+  const nom = document.getElementById("nom").value.trim().toLowerCase();
+  const prenom = document.getElementById("prenom").value.trim().toLowerCase();
+  const resultat = document.getElementById("resultat");
 
-      if (!nom || !prenom) {
-        resultat.innerHTML = "Veuillez saisir votre nom et prénom.";
-        return;
-      }
+  resultat.innerHTML = "Recherche en cours...";
 
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
 
-        const etudiant = data.find(e =>
-          e.nom.toLowerCase().trim() === nom &&
-          e.prenom.toLowerCase().trim() === prenom
-        );
+    const etudiant = data.find(e =>
+      String(e.nom).toLowerCase().trim() === nom &&
+      String(e.prenom).toLowerCase().trim() === prenom
+    );
 
-        if (etudiant) {
-  resultat.innerHTML = `
-    <table style="width:100%; margin-top:15px; border-collapse:collapse; font-size:15px;">
-      <tr><td>Droit et procédures</td><td>${etudiant.droit}</td></tr>
-      <tr><td>Économie</td><td>${etudiant.economie}</td></tr>
-      <tr><td>Aide à la décision</td><td>${etudiant.aideDecision}</td></tr>
-      <tr><td>Langue étrangère</td><td>${etudiant.langue}</td></tr>
-      <tr><td>Gestion de projet</td><td>${etudiant.gestionProjet}</td></tr>
-      <tr><td>Système</td><td>${etudiant.systeme}</td></tr>
-      <tr><td>Soft Skills</td><td>${etudiant.softSkills}</td></tr>
-      <tr><td><b>Moyenne</b></td><td><b>${etudiant.moyenne}</b></td></tr>
-    </table>
-  `;
+    if (etudiant) {
+      resultat.innerHTML = `
+        <table>
+          <tr><td>Droit et procédures</td><td>${etudiant.droit}</td></tr>
+          <tr><td>Économie</td><td>${etudiant.economie}</td></tr>
+          <tr><td>Aide à la décision</td><td>${etudiant.aideDecision}</td></tr>
+          <tr><td>Langue étrangère</td><td>${etudiant.langue}</td></tr>
+          <tr><td>Gestion de projet</td><td>${etudiant.gestionProjet}</td></tr>
+          <tr><td>Système d'information</td><td>${etudiant.systeme}</td></tr>
+          <tr><td>Soft Skills</td><td>${etudiant.softSkills}</td></tr>
+          <tr class="moyenne"><td>Moyenne générale</td><td>${Number(etudiant.moyenne).toFixed(2)}</td></tr>
+        </table>
+      `;
+    } else {
+      resultat.innerHTML = "Aucune note trouvée.";
+    }
+
+  } catch (error) {
+    resultat.innerHTML = "Erreur de connexion.";
+  }
 }
+</script>
+
+</body>
+</html>
