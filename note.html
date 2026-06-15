@@ -115,7 +115,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzPjfBsI2e2fzlOhRG4vB7miztv8RZ5cuEA2c66lHElkMcTUMDM4p5gXr0OyMQsY7ud3Q/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyLUCvXb3buos1QR6BM6UMO7o-CfV-PkT8FlB3a94F1eg6oTF4WJzSx12Ml_nUVFrrIOg/exec";
 
     async function chercherNote() {
       const nom = document.getElementById("nom").value.trim().toLowerCase();
@@ -137,16 +137,16 @@
         );
 
         if (etudiant) {
-          resultat.innerHTML = "Votre note est : " + etudiant.note;
-        } else {
-          resultat.innerHTML = "Aucune note trouvée.";
-        }
-
-      } catch (error) {
-        resultat.innerHTML = "Erreur de connexion.";
-      }
-    }
-  </script>
-
-</body>
-</html>
+  resultat.innerHTML = `
+    <table style="width:100%; margin-top:15px; border-collapse:collapse; font-size:15px;">
+      <tr><td>Droit et procédures</td><td>${etudiant.droit}</td></tr>
+      <tr><td>Économie</td><td>${etudiant.economie}</td></tr>
+      <tr><td>Aide à la décision</td><td>${etudiant.aideDecision}</td></tr>
+      <tr><td>Langue étrangère</td><td>${etudiant.langue}</td></tr>
+      <tr><td>Gestion de projet</td><td>${etudiant.gestionProjet}</td></tr>
+      <tr><td>Système</td><td>${etudiant.systeme}</td></tr>
+      <tr><td>Soft Skills</td><td>${etudiant.softSkills}</td></tr>
+      <tr><td><b>Moyenne</b></td><td><b>${etudiant.moyenne}</b></td></tr>
+    </table>
+  `;
+}
